@@ -7,13 +7,17 @@ public class GameManager : MonoBehaviour
     [SerializeField] private TMP_InputField inputWidth;
     [SerializeField] private TMP_InputField inputHeight;
     [SerializeField] private TMP_InputField inputNBombs;
+    [SerializeField] private Button btnBot;
     [SerializeField] private Button btnPlay;
     [SerializeField] private GameObject panelMenu;
     [SerializeField] private GameObject panelGameOver;
     [SerializeField] private GameObject panelWin;
     [SerializeField] private GameObject panelError;
 
-    int width, height, nBombs;
+    public int width, height, nBombs;
+
+    public bool endgame = false;
+    public bool bot = false;
 
 
     public static GameManager instance;
@@ -36,6 +40,7 @@ public class GameManager : MonoBehaviour
         inputWidth.contentType = TMP_InputField.ContentType.IntegerNumber;
         inputHeight.contentType = TMP_InputField.ContentType.IntegerNumber;
         inputNBombs.contentType = TMP_InputField.ContentType.IntegerNumber;
+        btnBot.onClick.AddListener(TaskOnClickBot);
         btnPlay.onClick.AddListener(TaskOnClick);
         panelMenu.SetActive(true);
         panelGameOver.SetActive(false);
@@ -74,6 +79,12 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    void TaskOnClickBot()
+    {
+        bot = true;
+        TaskOnClick();
+    }
+
     private void StartGame(int width, int height, int nBombs)
     {
         Generator.gen.SetWidth(width);
@@ -81,7 +92,7 @@ public class GameManager : MonoBehaviour
         Generator.gen.SetBombsNumber(nBombs);
         if(Validate() == 0)
         {
-            Generator.gen.Generate();
+            Generator.gen.Generate(bot);
             panelMenu.SetActive(false);
         }
         else
@@ -104,9 +115,11 @@ public class GameManager : MonoBehaviour
     public void LoseGame()
     {
         panelGameOver.SetActive(true);
+        endgame = true;
     }
     public void WinGame()
     {
         panelWin.SetActive(true);
+        endgame = true;
     }
 }

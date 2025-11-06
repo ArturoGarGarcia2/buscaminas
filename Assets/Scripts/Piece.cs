@@ -3,7 +3,7 @@ using TMPro;
 
 public class Piece : MonoBehaviour
 {
-    [SerializeField] private int x, y;
+    [SerializeField] public int x, y;
     [SerializeField] private bool bomb, check, flagged;
     private Color[] colors = {
         new Color(0f, 0f, 1f),
@@ -101,6 +101,7 @@ public class Piece : MonoBehaviour
         // if (IsChecked()) return;
         flagged = !flagged;
         flag.SetActive(flagged);
+        Generator.gen.CheckGame();
     }
 
     private void OnMouseOver()
@@ -114,7 +115,12 @@ public class Piece : MonoBehaviour
         else if (Input.GetMouseButtonDown(1))
         {
             FlagPiece();
-            Generator.gen.CheckGame();
         }
+    }
+
+    override
+    public string ToString()
+    {
+        return "(" + x + "," + y + ")";
     }
 }

@@ -4,8 +4,8 @@ public class Generator : MonoBehaviour
 {
     //Declaración de variables:
     [SerializeField] private GameObject piece;
-    [SerializeField] private int width, height, bombsNumber;
-    [SerializeField] private GameObject[][] map;
+    [SerializeField] public int width, height, bombsNumber;
+    [SerializeField] public GameObject[][] map;
 
     public bool dead = false;
 
@@ -30,7 +30,7 @@ public class Generator : MonoBehaviour
     {
         gen = this;
     }
-    public void Generate()
+    public void Generate(bool bot)
     {
 
         map = new GameObject[width][];
@@ -57,20 +57,20 @@ public class Generator : MonoBehaviour
             int y = Random.Range(0, height);
 
             if (!map[x][y].GetComponent<Piece>().IsBomb())
-            {
                 map[x][y].GetComponent<Piece>().setBomb(true);
-            }
             else
-            {
                 i--;
-            }
         }
         for (int j = 0; j < height; j++)
-        {
             for (int i = 0; i < width; i++)
-            {
                 GetBombsAround(i, j);
-            }
+
+        if (bot)
+        {
+            AIController.bot.width = width;
+            AIController.bot.height = height;
+            AIController.bot.map = map;
+            AIController.bot.StartBot();
         }
 
     }
