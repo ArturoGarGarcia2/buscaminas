@@ -11,7 +11,8 @@ public class AIController : MonoBehaviour
     public GameObject[][] map;
 
     public static AIController bot;
-    int ite = 1;
+    public bool playing = false;
+    public bool nextTurn = false;
 
 
 
@@ -20,9 +21,10 @@ public class AIController : MonoBehaviour
         bot = this;
     }
 
-    public void StartBot()
+    public void StartBot(bool playing)
     {
-        StartCoroutine(Play());
+        if (!playing) StartCoroutine(Play());
+        else playing = true;
     }
 
 
@@ -37,10 +39,34 @@ public class AIController : MonoBehaviour
             {
                 RandomPlay();
             }
-
-            ite++;
             yield return new WaitForSeconds(turnTime);
         }
+    }
+
+    public void PlayTurn()
+    {
+        if (!LogicPlay())
+        {
+            RandomPlay();
+        }
+    }
+
+
+    System.Collections.IEnumerator Paripe()
+    {
+        Debug.Log("Empieza el paripé");
+        yield return new WaitForSeconds(1f);
+        Debug.Log("Se juega el turno");
+        PlayTurn();
+        yield return new WaitForSeconds(1f);
+        GameManager.instance.canPlayerPlay = true;
+    }
+    
+    public void StartParipe()
+    {
+        Debug.Log("Turno del bot");
+        GameManager.instance.canPlayerPlay = false;
+        StartCoroutine(Paripe());
     }
 
 
@@ -70,9 +96,9 @@ public class AIController : MonoBehaviour
         {
             for (int i = 0; i < uncheckedPieces.Count; i++)
             {
-                uncheckedPieces[i].FlagPiece();
+                uncheckedPieces[i].FlagPiece(true);
+                return true;
             }
-
             return true;
         }
         else
@@ -92,7 +118,7 @@ public class AIController : MonoBehaviour
         {
             for (int i = 0; i < uncheckedPieces.Count; i++)
             {
-                uncheckedPieces[i].DrawBombs();
+                uncheckedPieces[i].DrawBombs(true);
             }
 
             return true;
@@ -115,7 +141,8 @@ public class AIController : MonoBehaviour
 
             if (!piece.IsChecked() && !piece.IsFlagged())
             {
-                piece.DrawBombs();
+                Debug.Log("pieza encontrada: " + piece);
+                piece.DrawBombs(true);
                 played = true;
             }
         }

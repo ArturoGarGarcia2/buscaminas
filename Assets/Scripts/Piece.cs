@@ -65,8 +65,9 @@ public class Piece : MonoBehaviour
         return flagged;
     }
 
-    public void DrawBombs()
+    public void DrawBombs(bool ignoreTurn = false)
     {
+        if (!ignoreTurn && !GameManager.instance.canPlayerPlay) return;
         if (!IsChecked() && !flagged)
         {
             SetCheck(true);
@@ -93,11 +94,11 @@ public class Piece : MonoBehaviour
                 }
             }
         }
-
     }
 
-    public void FlagPiece()
+    public void FlagPiece(bool ignoreTurn = false)
     {
+        if (!ignoreTurn && !GameManager.instance.canPlayerPlay) return;
         // if (IsChecked()) return;
         flagged = !flagged;
         flag.SetActive(flagged);
@@ -111,6 +112,7 @@ public class Piece : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             DrawBombs();
+            if (GameManager.instance.playing) AIController.bot.StartParipe();
         }
         else if (Input.GetMouseButtonDown(1))
         {

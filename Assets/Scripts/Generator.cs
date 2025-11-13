@@ -25,14 +25,13 @@ public class Generator : MonoBehaviour
         this.bombsNumber = bombsNumber;
     }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     private void Awake()
     {
         gen = this;
     }
-    public void Generate(bool bot)
-    {
 
+    public void Generate(bool bot, bool playing)
+    {
         map = new GameObject[width][];
         for (int i = 0; i < width; i++)
         {
@@ -70,7 +69,7 @@ public class Generator : MonoBehaviour
             AIController.bot.width = width;
             AIController.bot.height = height;
             AIController.bot.map = map;
-            AIController.bot.StartBot();
+            AIController.bot.StartBot(playing);
         }
 
     }
@@ -120,49 +119,49 @@ public class Generator : MonoBehaviour
         // Arriba-izquierda
         if (x > 0 && y > 0)
         {
-            map[x - 1][y - 1].GetComponent<Piece>().DrawBombs();
+            map[x - 1][y - 1].GetComponent<Piece>().DrawBombs(true);
         }
 
         // Arriba
         if (y > 0)
         {
-            map[x][y - 1].GetComponent<Piece>().DrawBombs();
+            map[x][y - 1].GetComponent<Piece>().DrawBombs(true);
         }
 
         // Arriba-derecha
         if (x < width - 1 && y > 0)
         {
-            map[x + 1][y - 1].GetComponent<Piece>().DrawBombs();
+            map[x + 1][y - 1].GetComponent<Piece>().DrawBombs(true);
         }
 
         // Izquierda
         if (x > 0)
         {
-            map[x - 1][y].GetComponent<Piece>().DrawBombs();
+            map[x - 1][y].GetComponent<Piece>().DrawBombs(true);
         }
 
         // Derecha
         if (x < width - 1)
         {
-            map[x + 1][y].GetComponent<Piece>().DrawBombs();
+            map[x + 1][y].GetComponent<Piece>().DrawBombs(true);
         }
 
         // Abajo-izquierda
         if (x > 0 && y < height - 1)
         {
-            map[x - 1][y + 1].GetComponent<Piece>().DrawBombs();
+            map[x - 1][y + 1].GetComponent<Piece>().DrawBombs(true);
         }
 
         // Abajo
         if (y < height - 1)
         {
-            map[x][y + 1].GetComponent<Piece>().DrawBombs();
+            map[x][y + 1].GetComponent<Piece>().DrawBombs(true);
         }
 
         // Abajo-derecha
         if (x < width - 1 && y < height - 1)
         {
-            map[x + 1][y + 1].GetComponent<Piece>().DrawBombs();
+            map[x + 1][y + 1].GetComponent<Piece>().DrawBombs(true);
         }
     }
 
@@ -174,7 +173,7 @@ public class Generator : MonoBehaviour
             for (int i = 0; i < width; i++)
             {
                 Piece piece = map[i][j].GetComponent<Piece>();
-                if (piece.IsBomb()) map[i][j].GetComponent<Piece>().DrawBombs();
+                if (piece.IsBomb()) map[i][j].GetComponent<Piece>().DrawBombs(true);
             }
         }
     }
